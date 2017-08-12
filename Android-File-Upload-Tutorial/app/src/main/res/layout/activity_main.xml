@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context="com.hellohasan.android_file_upload_tutorial.MainActivity">
 
     <Button
@@ -25,11 +26,47 @@
         app:layout_constraintTop_toTopOf="parent"
         android:onClick="uploadButtonClicked"/>
 
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="271dp"
+        android:layout_height="41dp"
+        android:hint="Name"
+        android:text="Hasan"
+        app:layout_constraintTop_toBottomOf="@id/addImageButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/ageEditText"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <EditText
+        android:id="@+id/ageEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Age"
+        android:text="26"
+        app:layout_constraintTop_toBottomOf="@id/addImageButton"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="0dp" />
+
+    <TextView
+        android:id="@+id/responseTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nameEditText"
+        tools:text="Response Message:"
+        android:textSize="18sp"
+        android:textColor="@color/colorPrimaryDark"/>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/addImageButton"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/responseTextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />

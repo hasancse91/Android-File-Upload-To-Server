@@ -8,9 +8,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class ImageSenderInfo implements Parcelable {
 
-    @SerializedName("sender")
+    @SerializedName("sender_name")
     private String sender;
-    @SerializedName("age")
+    @SerializedName("sender_age")
     private int age;
 
     public ImageSenderInfo() {

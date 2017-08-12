@@ -1,13 +1,15 @@
 package com.hellohasan.android_file_upload_tutorial.NetworkRelatedClass;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.hellohasan.android_file_upload_tutorial.ModelClass.EventModel;
 import com.hellohasan.android_file_upload_tutorial.ModelClass.ImageSenderInfo;
 import com.hellohasan.android_file_upload_tutorial.ModelClass.ResponseModel;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 
@@ -20,24 +22,17 @@ import retrofit2.Response;
 
 public class NetworkCall {
 
-    public static void fileUpload(Context context, String filePath, ImageSenderInfo imageSenderInfo) {
+    public static void fileUpload(String filePath, ImageSenderInfo imageSenderInfo) {
 
         ApiInterface apiInterface = RetrofitApiClient.getClient().create(ApiInterface.class);
         Logger.addLogAdapter(new AndroidLogAdapter());
 
-
-        // create RequestBody instance from file
-//        RequestBody requestFile = RequestBody.create(MediaType.parse(getContentResolver().getType(uri)), file);
-
         File file = new File(filePath);
-
+        //create RequestBody instance from file
         RequestBody requestFile = RequestBody.create(MediaType.parse("image"), file);
-//        RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(fileUri)), file);
-
 
         // MultipartBody.Part is used to send also the actual file name
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-
 
         Gson gson = new Gson();
         String patientData = gson.toJson(imageSenderInfo);
@@ -53,16 +48,18 @@ public class NetworkCall {
 
                 ResponseModel responseModel = response.body();
 
-                if(response.code()==200 && responseModel != null)
-                    Logger.d("Success. Response: " + responseModel.getMessage());
-                else
-                    Logger.d("Failed. Response code: " + response.code());
+                if(responseModel != null){
+                    EventBus.getDefault().post(new EventModel("response", responseModel.getMessage()));
+                    Logger.d("Response code " + response.code() +
+                            " Response Message: " + responseModel.getMessage());
+                } else
+                    EventBus.getDefault().post(new EventModel("response", "ResponseModel is NULL"));
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseModel> call, @NonNull Throwable t) {
                 Logger.d("Exception: " + t);
-
+                EventBus.getDefault().post(new EventModel("response", t.getMessage()));
             }
         });
     }

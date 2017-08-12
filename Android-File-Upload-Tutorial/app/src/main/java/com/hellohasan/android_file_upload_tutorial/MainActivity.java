@@ -12,15 +12,26 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.hellohasan.android_file_upload_tutorial.ModelClass.EventModel;
 import com.hellohasan.android_file_upload_tutorial.ModelClass.ImageSenderInfo;
 import com.hellohasan.android_file_upload_tutorial.NetworkRelatedClass.NetworkCall;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 public class MainActivity extends AppCompatActivity {
 
+    private EditText nameEditText;
+    private EditText ageEditText;
     private ImageView imageView;
     private Button uploadButton;
+    private TextView responseTextView;
+
     private String filePath;
     private static final int PICK_PHOTO = 1958;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -28,13 +39,24 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventModel event) throws ClassNotFoundException {
+        if (event.isTagMatchWith("response")) {
+            String responseMessage = "Response from Server:\n" + event.getMessage();
+            responseTextView.setText(responseMessage);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        nameEditText = (EditText) findViewById(R.id.nameEditText);
+        ageEditText = (EditText) findViewById(R.id.ageEditText);
         imageView = (ImageView) findViewById(R.id.imageView);
         uploadButton = (Button) findViewById(R.id.uploadButton);
+        responseTextView = (TextView) findViewById(R.id.responseTextView);
 
         verifyStoragePermissions(this);
     }
@@ -57,7 +79,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void uploadButtonClicked(View view) {
-        NetworkCall.fileUpload(this, filePath, new ImageSenderInfo("Hasan", 26));
+        String name = nameEditText.getText().toString();
+        int age = Integer.parseInt(ageEditText.getText().toString());
+        NetworkCall.fileUpload(filePath, new ImageSenderInfo(name, age));
     }
 
     public String getPath(Uri uri) {
@@ -68,6 +92,17 @@ public class MainActivity extends AppCompatActivity {
         return cursor.getString(column_index);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
 
     /**
      * Checks if the app has permission to write to device storage
