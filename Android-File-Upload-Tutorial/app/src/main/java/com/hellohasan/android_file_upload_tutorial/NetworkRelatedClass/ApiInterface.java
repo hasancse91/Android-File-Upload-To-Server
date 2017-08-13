@@ -16,7 +16,6 @@ public interface ApiInterface {
     @POST("file_upload_api/upload.php")
     Call<ResponseModel> fileUpload(
             @Part("sender_information") RequestBody description,
-            @Part MultipartBody.Part file
-    );
+            @Part MultipartBody.Part file);
 
 }

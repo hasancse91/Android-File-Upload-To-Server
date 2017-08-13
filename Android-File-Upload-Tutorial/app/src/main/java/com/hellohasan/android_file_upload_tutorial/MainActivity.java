@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         NetworkCall.fileUpload(filePath, new ImageSenderInfo(name, age));
     }
 
-    public String getPath(Uri uri) {
+    private String getPath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
