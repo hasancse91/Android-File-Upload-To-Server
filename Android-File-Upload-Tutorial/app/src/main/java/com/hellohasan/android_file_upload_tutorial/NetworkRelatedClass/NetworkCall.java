@@ -1,6 +1,6 @@
 package com.hellohasan.android_file_upload_tutorial.NetworkRelatedClass;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.hellohasan.android_file_upload_tutorial.ModelClass.EventModel;
