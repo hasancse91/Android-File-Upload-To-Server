@@ -26,7 +26,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean isOnlyImageAllowed = true; // if you want to upload only image, make it true. Otherwise false
+    // if you want to upload only image, make it true. Otherwise to allow any file- false
+    boolean isOnlyImageAllowed = true;
 
     private EditText nameEditText;
     private EditText ageEditText;
@@ -68,8 +69,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent;
 
         if (isOnlyImageAllowed) {
+            // only image can be selected
             intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         } else {
+            // any type of files including image can be selected
             intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("file/*");
         }
