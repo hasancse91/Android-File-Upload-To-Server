@@ -26,6 +26,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity {
 
+    boolean isOnlyImageAllowed = true; // if you want to upload only image, make it true. Otherwise false
+
     private EditText nameEditText;
     private EditText ageEditText;
     private ImageView imageView;
@@ -52,18 +54,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        nameEditText = (EditText) findViewById(R.id.nameEditText);
-        ageEditText = (EditText) findViewById(R.id.ageEditText);
-        imageView = (ImageView) findViewById(R.id.imageView);
-        uploadButton = (Button) findViewById(R.id.uploadButton);
-        responseTextView = (TextView) findViewById(R.id.responseTextView);
+        nameEditText = findViewById(R.id.nameEditText);
+        ageEditText = findViewById(R.id.ageEditText);
+        imageView = findViewById(R.id.imageView);
+        uploadButton = findViewById(R.id.uploadButton);
+        responseTextView = findViewById(R.id.responseTextView);
 
         verifyStoragePermissions(this);
     }
 
     public void addPhoto(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        Intent intent;
+
+        if (isOnlyImageAllowed) {
+            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        } else {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("file/*");
+        }
+
         startActivityForResult(intent, PICK_PHOTO);
     }
 
@@ -108,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
      * Checks if the app has permission to write to device storage
      *
      * If the app does not has permission then the user will be prompted to grant permissions
-     *
-     * @param activity
      */
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission

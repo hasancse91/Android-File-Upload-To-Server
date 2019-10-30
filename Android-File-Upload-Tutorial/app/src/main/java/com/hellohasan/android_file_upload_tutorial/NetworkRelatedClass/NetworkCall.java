@@ -29,7 +29,7 @@ public class NetworkCall {
 
         File file = new File(filePath);
         //create RequestBody instance from file
-        RequestBody requestFile = RequestBody.create(MediaType.parse("image"), file);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file); //allow image and any other file
 
         // MultipartBody.Part is used to send also the actual file name
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);

@@ -9,10 +9,9 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
 public class RetrofitApiClient {
 
-    private static final String BASE_URL = "http://192.168.0.103/";
+    private static final String BASE_URL = "http://192.168.43.55/"; //IP of your localhost or live server
 
     private static Retrofit retrofit = null;
 
